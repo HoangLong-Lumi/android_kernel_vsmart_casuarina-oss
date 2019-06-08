@@ -15,7 +15,7 @@
 #include <dt-bindings/clock/msm-clocks-8953.h>
 
 &soc {
-	i2c@78b7000 { /* BLSP1 QUP3 */
+	i2c@78b7000 {
             focaltech@38 {
                 compatible = "focaltech,fts";
                 reg = <0x38>;
@@ -49,6 +49,40 @@
 			gpio-key,wakeup;
 		};
 	};
+    };
+
+    // add for fingerprint
+    fingerprint_gpio {
+        compatible = "qcom,fingerprint-gpio";
+        interrupt-parent = <&tlmm>;
+        fp-gpio-reset = <&tlmm 140 0x00>;
+        fp-gpio-int = <&tlmm 48 0x00>;
+     //   fp-gpio-power = <&tlmm 69 0x00>;
+        status = "okay";
+    };
+
+    vdd_vreg: vdd_vreg {
+              compatible = "regulator-fixed";
+              status = "ok";
+              regulator-name = "vdd_vreg";
+          };
+
+          gpio_keys {
+              compatible = "gpio-keys";
+              label = "gpio-keys";
+              pinctrl-names = "default";
+              pinctrl-0 = <&gpio_key_active>;
+
+              vol_up {
+                  label = "volume_up";
+                  gpios = <&tlmm 85 0x1>;
+                  linux,input-type = <1>;
+                  linux,code = <115>;
+                  debounce-interval = <15>;
+                  linux,can-disable;
+                  gpio-key,wakeup;
+              };
+          };
 };
 
 &blsp1_uart0 {
