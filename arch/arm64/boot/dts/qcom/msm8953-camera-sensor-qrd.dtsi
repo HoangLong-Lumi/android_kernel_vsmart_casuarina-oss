@@ -175,7 +175,7 @@
 		pinctrl-1 = <&cam_sensor_mclk2_sleep
 				&cam_sensor_front_sleep>;
 		gpios = <&tlmm 28 0>,
-			<&tlmm 40 0>,
+			<&tlmm 131 0>,
 			<&tlmm 36 0>;
 		qcom,gpio-reset = <1>;
 		qcom,gpio-standby = <2>;
