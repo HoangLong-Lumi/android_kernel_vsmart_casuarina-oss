@@ -2208,7 +2208,7 @@ static void voltage_soc_timeout_work(struct work_struct *work)
 	mutex_lock(&chip->bms_device_mutex);
 	if (!chip->bms_dev_open) {
 		pr_warn("BMS device not opened, using voltage based SOC\n");
-		chip->dt.cfg_use_voltage_soc = true;
+		chip->dt.cfg_use_voltage_soc = false;
 	}
 	mutex_unlock(&chip->bms_device_mutex);
 }
