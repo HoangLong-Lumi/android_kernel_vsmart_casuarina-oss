@@ -186,8 +186,8 @@
 	wsa881x_analog_vi_gpio: wsa881x_analog_vi_pctrl {
 		compatible = "qcom,msm-cdc-pinctrl";
 		pinctrl-names = "aud_active", "aud_sleep";
-		pinctrl-0 = <&wsa_vi_on>;
-		pinctrl-1 = <&wsa_vi_off>;
+	//	pinctrl-0 = <&wsa_vi_on>;
+	//	pinctrl-1 = <&wsa_vi_off>;
 	};
 	wsa881x_analog_clk_gpio: wsa881x_analog_clk_pctrl {
 		compatible = "qcom,msm-cdc-pinctrl";
