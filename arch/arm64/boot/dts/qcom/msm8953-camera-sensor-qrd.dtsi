@@ -149,7 +149,7 @@
 		qcom,led-flash-src = <&led_flash0>;
 	
 		qcom,actuator-src = <&actuator0>;
-//		qcom,eeprom-src = <&eeprom0>;
+		qcom,eeprom-src = <&eeprom0>;
 		cam_vio-supply = <&pm8953_l6>;
 		cam_vdig-supply = <&pm8953_l2>;
 		cam_vaf-supply = <&pm8953_l17>;
@@ -246,7 +246,7 @@
 		qcom,csiphy-sd-index = <2>;
 		qcom,csid-sd-index = <0>;
 		qcom,mount-angle = <270>;
-		//qcom,eeprom-src = <&eeprom1>;
+		qcom,eeprom-src = <&eeprom1>;
 		cam_vdig-supply = <&pm8953_l23>;
 		cam_vana-supply = <&pm8953_l22>;
 		cam_vio-supply = <&pm8953_l6>;
@@ -288,7 +288,7 @@
 		qcom,csiphy-sd-index = <1>;
 		qcom,csid-sd-index = <1>;
 		qcom,mount-angle = <270>;
-		//qcom,eeprom-src = <&eeprom3>;
+		qcom,eeprom-src = <&eeprom3>;
 		cam_vdig-supply = <&pm8953_l23>;
 		cam_vio-supply = <&pm8953_l6>;
 		cam_vana-supply = <&pm8953_l22>;
