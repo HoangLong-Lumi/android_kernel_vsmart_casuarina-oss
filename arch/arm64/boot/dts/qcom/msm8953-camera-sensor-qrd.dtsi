@@ -19,7 +19,7 @@
 		cell-index = <0>;
 		reg = <0x0>;
 		compatible = "qcom,actuator";
-		qcom,cci-master = <0>;
+		qcom,cci-master = <1>;
 		cam_vaf-supply = <&pm8953_l17>;
 		qcom,cam-vreg-name = "cam_vaf";
 		qcom,cam-vreg-min-voltage = <2850000>;
