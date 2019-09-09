@@ -4443,6 +4443,77 @@ static void smblib_destroy_votables(struct smb_charger *chg)
 		destroy_votable(chg->chg_disable_votable);
 }
 
+#ifdef CONFIG_VSM_FACTORY_BIN
+#define HEARTBEAT_MS			10000
+#define MAX_FACTORY_SOC			72
+#define MIN_FACTORY_SOC 		68
+static void smblib_period_update_work(struct work_struct *work)
+{
+	struct smb_charger *chg = container_of(work, struct smb_charger,
+						period_update_work.work);
+	int period = HEARTBEAT_MS;
+	union power_supply_propval bat_soc;
+	union power_supply_propval pval = {0, };
+  	int rc, suspend = 0;
+  	int capacity = 0;
+
+  	/*pr_info("====> %s\n", __func__);*/
+
+  	rc = smblib_get_prop_batt_capacity(chg, &bat_soc);
+  	capacity = bat_soc.intval;
+	if (rc < 0)
+		smblib_err(chg, "Error in getting bat_soc\n");
+
+  	if(chg == NULL) {
+		pr_err("pmic fatal error:the_chg=null\n!!");
+		return;
+	}
+
+  	/*we monitor every second incase capacity bigger than min soc*/
+  	if(capacity > MIN_FACTORY_SOC - 2)
+        period = 1000;
+
+	rc = smblib_get_prop_usb_present(chg, &pval);
+	if (rc < 0) {
+		smblib_err(chg,
+			"Couldn't get usb present prop rc=%d\n", rc);
+		return;
+	}
+
+	rc = smblib_get_usb_suspend(chg, &suspend);
+	if (rc < 0) {
+		smblib_err(chg,
+			"Couldn't get usb suspend rc=%d\n", rc);
+		return;
+	}
+
+	if(pval.intval) // usb - charger present
+	{
+		if((capacity > MAX_FACTORY_SOC - 1) && !suspend) // check to do just one time
+		{
+			pval.intval = 1;
+			smblib_set_prop_input_suspend(chg, &pval);
+			pr_debug("FACTORY bin: suspend input because of SOC\n");
+
+		} else if((capacity < MIN_FACTORY_SOC) && suspend) {
+
+			pval.intval = 0;
+			smblib_set_prop_input_suspend(chg, &pval);
+			pr_debug("FACTORY bin: resume input because of SOC\n");
+		}
+
+	} else {
+
+		pval.intval = 0;
+		smblib_set_prop_input_suspend(chg, &pval);
+		pr_debug("FACTORY bin: resume input because of SOC\n");
+	}
+
+	schedule_delayed_work(&chg->period_update_work,
+				      round_jiffies_relative(msecs_to_jiffies(period)));
+}
+#endif
+
 int smblib_init(struct smb_charger *chg)
 {
 	int rc = 0;
@@ -4457,6 +4528,9 @@ int smblib_init(struct smb_charger *chg)
 	INIT_DELAYED_WORK(&chg->uusb_otg_work, smblib_uusb_otg_work);
 	INIT_DELAYED_WORK(&chg->bb_removal_work, smblib_bb_removal_work);
 	INIT_DELAYED_WORK(&chg->usbov_dbc_work, smblib_usbov_dbc_work);
+#ifdef CONFIG_VSM_FACTORY_BIN
+	INIT_DELAYED_WORK(&chg->period_update_work, smblib_period_update_work);
+#endif
 
 	if (chg->wa_flags & CHG_TERMINATION_WA) {
 		INIT_WORK(&chg->chg_termination_work,
@@ -4490,6 +4564,11 @@ int smblib_init(struct smb_charger *chg)
 	chg->fake_batt_status = -EINVAL;
 	chg->jeita_configured = false;
 	chg->sink_src_mode = UNATTACHED_MODE;
+
+#ifdef CONFIG_VSM_FACTORY_BIN
+	schedule_delayed_work(&chg->period_update_work,
+		round_jiffies_relative(msecs_to_jiffies(HEARTBEAT_MS)));
+#endif
 
 	switch (chg->mode) {
 	case PARALLEL_MASTER:

@@ -355,6 +355,7 @@ struct smb_charger {
 	struct delayed_work	uusb_otg_work;
 	struct delayed_work	bb_removal_work;
 	struct delayed_work	usbov_dbc_work;
+	struct delayed_work	period_update_work;
 
 	/* alarm */
 	struct alarm		moisture_protection_alarm;
