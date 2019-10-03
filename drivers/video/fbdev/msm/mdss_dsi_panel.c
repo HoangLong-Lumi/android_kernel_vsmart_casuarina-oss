@@ -446,6 +446,19 @@ int mdss_dsi_panel_reset(struct mdss_panel_data *pdata, int enable)
 				usleep_range(100, 110);
 			}
 
+			/* For TP exit gesture mode */
+			if (gpio_is_valid(ctrl_pdata->tp_rst_gpio)) {
+				rc_tp = gpio_request(ctrl_pdata->tp_rst_gpio, "tp_rst_gpio");
+				if (rc_tp) {
+					pr_err("FTS: request tp rst gpio failed, rc_tp =%d\n", rc_tp);
+				} else {
+					if (gesture_mode_enable == 1) {
+					gpio_set_value(ctrl_pdata->tp_rst_gpio, 1);
+					usleep_range(5000, 5005);
+					pr_debug("FTS: set TP_RST 0\n");
+					}
+				}
+			}
 			if (pdata->panel_info.rst_seq_len) {
 				rc = gpio_direction_output(ctrl_pdata->rst_gpio,
 					pdata->panel_info.rst_seq[0]);
@@ -517,8 +530,21 @@ int mdss_dsi_panel_reset(struct mdss_panel_data *pdata, int enable)
 			usleep_range(100, 110);
 			gpio_free(ctrl_pdata->disp_en_gpio);
 		}
-		gpio_set_value((ctrl_pdata->rst_gpio), 0);
-		gpio_free(ctrl_pdata->rst_gpio);
+		if (gpio_is_valid(ctrl_pdata->tp_rst_gpio)) {
+			rc = gpio_request(ctrl_pdata->tp_rst_gpio, "tp_rst_gpio");
+			if (rc) {
+				pr_err("request tp rst gpio failed, rc=%d\n", rc);
+			} else {
+				if (gesture_mode_enable == 0) {
+					gpio_set_value(ctrl_pdata->tp_rst_gpio, 1);
+					usleep_range(100, 110);
+				}
+				gpio_free(ctrl_pdata->tp_rst_gpio);
+			}
+		}
+
+		if (gpio_is_valid(ctrl_pdata->rst_gpio))
+			gpio_free(ctrl_pdata->rst_gpio);
 		if (gpio_is_valid(ctrl_pdata->mode_gpio))
 			gpio_free(ctrl_pdata->mode_gpio);
 	}
