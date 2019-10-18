@@ -323,7 +323,7 @@
 			qcom,hw-connector-mitigation;
 			qcom,connector-internal-pull-kohm = <30>;
 			qcom,chg-term-src = <1>;
-			qcom,chg-term-current-ma = <(-250)>;
+			qcom,chg-term-current-ma = <(-300)>;
 			qcom,chg-term-base-current-ma = <(-100)>;
 
 			qcom,thermal-mitigation
@@ -486,7 +486,7 @@
 			#address-cells = <1>;
 			#size-cells = <1>;
 
-			qcom,qg-iterm-ma = <280>;
+			qcom,qg-iterm-ma = <330>;
 			qcom,hold-soc-while-full;
 			qcom,linearize-soc;
 			qcom,qg-vadc = <&pmi632_vadc>;

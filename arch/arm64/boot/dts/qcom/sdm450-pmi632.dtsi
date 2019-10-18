@@ -268,13 +268,13 @@
 				type = "passive";
 			};
 			quiet_batt_trip2: quiet_batt-trip2 {
-				temperature = <40000>;
-				hysteresis = <2000>;
+				temperature = <43000>;
+				hysteresis = <5000>;
 				type = "passive";
 			};
 			quiet_batt_trip3: quiet_batt-trip3 {
-				temperature = <43000>;
-				hysteresis = <3000>;
+				temperature = <48000>;
+				hysteresis = <5000>;
 				type = "passive";
 			};
 			quiet_cpus_trip: quiet_cpus-trip {
@@ -288,8 +288,13 @@
 				type = "passive";
 			};
 			quiet_batt_trip4: quiet_batt-trip4 {
-				temperature = <48000>;
-				hysteresis = <5000>;
+				temperature = <49000>;
+				hysteresis = <2000>;
+				type = "passive";
+			};
+			quiet_batt_trip5: quiet_batt-trip5 {
+				temperature = <52000>;
+				hysteresis = <3000>;
 				type = "passive";
 			};
 			quiet_modem_trip1: quiet_modem-trip1 {
@@ -355,19 +360,23 @@
 			};
 			battery_lvl1 {
 				trip = <&quiet_batt_trip1>;
-				cooling-device = <&pmi632_charger 2 2>;
+				cooling-device = <&pmi632_charger 0 0>;
 			};
 			battery_lvl2 {
 				trip = <&quiet_batt_trip2>;
-				cooling-device = <&pmi632_charger 3 3>;
+				cooling-device = <&pmi632_charger 1 1>;
 			};
 			battery_lvl3 {
 				trip = <&quiet_batt_trip3>;
-				cooling-device = <&pmi632_charger 4 4>;
+				cooling-device = <&pmi632_charger 2 2>;
 			};
 			battery_lvl4 {
 				trip = <&quiet_batt_trip4>;
-				cooling-device = <&pmi632_charger 5 5>;
+				cooling-device = <&pmi632_charger 3 4>;
+			};
+			battery_lvl5 {
+				trip = <&quiet_batt_trip5>;
+				cooling-device = <&pmi632_charger 4 5>;
 			};
 		};
 	};
