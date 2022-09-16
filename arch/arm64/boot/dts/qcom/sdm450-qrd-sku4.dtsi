@@ -113,6 +113,7 @@
 	pinctrl-1 = <&mdss_dsi_suspend &mdss_te_suspend>;
 	qcom,platform-te-gpio = <&tlmm 24 0>;
 	qcom,platform-reset-gpio = <&tlmm 61 0>;
+	vsm,tp-rst-gpio = <&tlmm 64 0>;
 };
 
 &mdss_dsi1 {

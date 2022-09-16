@@ -37,6 +37,8 @@
 
 DEFINE_LED_TRIGGER(bl_led_trigger);
 
+extern int gesture_mode_enable;
+
 void mdss_dsi_panel_pwm_cfg(struct mdss_dsi_ctrl_pdata *ctrl)
 {
 	if (ctrl->pwm_pmi)
@@ -365,7 +367,7 @@ int mdss_dsi_panel_reset(struct mdss_panel_data *pdata, int enable)
 {
 	struct mdss_dsi_ctrl_pdata *ctrl_pdata = NULL;
 	struct mdss_panel_info *pinfo = NULL;
-	int i, rc = 0;
+	int i, rc = 0, rc_tp = 0;
 
 	if (pdata == NULL) {
 		pr_err("%s: Invalid input data\n", __func__);
@@ -452,17 +454,26 @@ int mdss_dsi_panel_reset(struct mdss_panel_data *pdata, int enable)
 				if (rc) {
 					pr_err("%s: unable to set dir for rst gpio\n",
 						__func__);
+					gpio_free(ctrl_pdata->tp_rst_gpio);
 					goto exit;
 				}
 			}
 
 			for (i = 0; i < pdata->panel_info.rst_seq_len; ++i) {
+				if (rc_tp == 0) {
+					gpio_set_value((ctrl_pdata->tp_rst_gpio),
+						pdata->panel_info.rst_seq[i]);
+					pr_debug("FTS: SET TP_RST %d\n",
+						pdata->panel_info.rst_seq[i]);
+				}
 				gpio_set_value((ctrl_pdata->rst_gpio),
 					pdata->panel_info.rst_seq[i]);
 				if (pdata->panel_info.rst_seq[++i])
 					usleep_range((pinfo->rst_seq[i] * 1000),
 					(pinfo->rst_seq[i] * 1000) + 10);
 			}
+			if (rc_tp == 0)
+				gpio_free(ctrl_pdata->tp_rst_gpio);
 
 			if (gpio_is_valid(ctrl_pdata->bklt_en_gpio)) {
 
