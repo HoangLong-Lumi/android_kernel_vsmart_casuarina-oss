@@ -106,7 +106,7 @@
 	ibb-supply = <&lcdb_ncp_vreg>;
 	/delete-property/ vdd-supply;
 
-	qcom,dsi-pref-prim-pan = <&dsi_hx8399c_truly_vid>;
+	qcom,dsi-pref-prim-pan = <&dsi_ft8006p_hlt_1600_video>;
 	qcom,platform-bklight-en-gpio = <&pm8953_gpios 4 0>;
 	pinctrl-names = "mdss_default", "mdss_sleep";
 	pinctrl-0 = <&mdss_dsi_active &mdss_te_active>;
