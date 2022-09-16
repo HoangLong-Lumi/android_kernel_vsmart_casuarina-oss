@@ -36,8 +36,8 @@
 /{
 	mtp_batterydata: qcom,battery-data {
 		qcom,batt-id-range-pct = <15>;
-		#include "qg-batterydata-ascent-3450mah.dtsi"
-		#include "qg-batterydata-mlp356477-2800mah.dtsi"
+		#include "qg-batterydata-V430-4950mah-300k.dtsi"
+		//#include "qg-batterydata-mlp356477-2800mah.dtsi"
 	};
 };
 
