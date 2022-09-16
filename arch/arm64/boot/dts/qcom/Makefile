@@ -1,3 +1,4 @@
+ifeq ($(CONFIG_VSM_BUILD_DT_OVERLAY),y)
 ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
 dtbo-$(CONFIG_ARCH_MSM8953) += msm8953-mtp-overlay.dtbo \
 	msm8953-cdp-overlay.dtbo \
@@ -145,6 +146,10 @@ dtb-$(CONFIG_ARCH_SDM632) += sdm632-rumi.dtb \
 	sdm632-pm8004-qrd-sku4.dtb \
 	sdm632-pm8004-qrd.dtb
 
+endif
+else
+dtb-$(CONFIG_ARCH_SDM450) += Qualcomm_Technologies,_Inc._SDM450_+_PMI632_SOC.dtb
+dtb-$(CONFIG_ARCH_SDM632) += Qualcomm_Technologies,_Inc._SDM632_+_PMI632_SOC.dtb
 endif
 
 always		:= $(dtb-y)
